@@ -44,22 +44,31 @@ class PageTitleAlt2 extends React.Component {
       <div className="app-page-title">
         <div className="page-title-wrapper">
           <div className="page-title-heading">
-            <div className={cx("page-title-icon rounded-circle", {
+            <div
+              className={cx("page-title-icon rounded-circle", {
                 "d-none": !enablePageTitleIcon,
-              })}>
+              })}
+            >
               <i className={icon} />
             </div>
             <div>
               {heading}
-              <div className={cx("page-title-subheading", {
+              <div
+                className={cx("page-title-subheading", {
                   "d-none": !enablePageTitleSubheading,
-                })}>
+                })}
+              >
                 {subheading}
               </div>
             </div>
           </div>
           <div className="page-title-actions">
-            <Button className="btn-pill btn-shadow me-3" onClick={this.notify22} color="success" id="Tooltip-123">
+            <Button
+              className="btn-pill btn-shadow me-3"
+              onClick={this.notify22}
+              color="success"
+              id="Tooltip-123"
+            >
               <FontAwesomeIcon icon={faBatteryThreeQuarters} />
             </Button>
             <UncontrolledTooltip placement="left" target={"Tooltip-123"}>

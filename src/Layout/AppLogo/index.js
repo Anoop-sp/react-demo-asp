@@ -39,12 +39,21 @@ class HeaderLogo extends React.Component {
     return (
       <Fragment>
         <div className="app-header__logo">
-          <img src="https://pbs.twimg.com/profile_images/1315183144224518144/5gh3qBdx_400x400.jpg" width="55"/>
+          <img
+            src="https://pbs.twimg.com/profile_images/1315183144224518144/5gh3qBdx_400x400.jpg"
+            width="55"
+          />
           <span>REx Environment</span>
           <div className="header__pane ms-auto">
             <div onClick={this.toggleEnableClosedSidebar}>
-              <Slider width={26} lineHeight={2} lineSpacing={5} color="#6c757d"
-                active={this.state.active} onClick={() => this.setState({ active: !this.state.active })}/>
+              <Slider
+                width={26}
+                lineHeight={2}
+                lineSpacing={5}
+                color="#6c757d"
+                active={this.state.active}
+                onClick={() => this.setState({ active: !this.state.active })}
+              />
             </div>
           </div>
         </div>

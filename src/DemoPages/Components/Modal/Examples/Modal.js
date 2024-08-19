@@ -20,26 +20,33 @@ class ModalExample extends React.Component {
   render() {
     return (
       <span className="d-inline-block mb-2 me-2">
-        <Button color="primary" onClick={this.toggle}>
-          Basic Modal
+        <Button
+          onClick={this.toggle}
+          className="mb-2 me-2 btn-icon btn-icon-only btn-shadow btn-outline-2x"
+          outline
+          color="light"
+        >
+          {/* <i className="lnr-dinner btn-icon-wrapper"> </i> */}
+          <i class="fa fa-fw" aria-hidden="true" title="Copy to use sliders">
+            
+          </i>
         </Button>
-        <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+        {/* <Button color="primary" onClick={this.toggle}>
+          Basic Modal
+        </Button> */}
+        <Modal
+          isOpen={this.state.modal}
+          toggle={this.toggle}
+          className={this.props.className}
+        >
           <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
-          <ModalBody>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
-          </ModalBody>
+          <ModalBody></ModalBody>
           <ModalFooter>
             <Button color="link" onClick={this.toggle}>
               Cancel
             </Button>
             <Button color="primary" onClick={this.toggle}>
-              Do Something
+              Search
             </Button>{" "}
           </ModalFooter>
         </Modal>

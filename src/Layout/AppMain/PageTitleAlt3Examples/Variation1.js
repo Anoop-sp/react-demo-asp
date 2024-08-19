@@ -7,6 +7,7 @@ import { toast, Slide } from "react-toastify";
 import { faBatteryThreeQuarters } from "@fortawesome/free-solid-svg-icons";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ModalExample from "../../../DemoPages/Components/Modal/Examples/Modal";
 
 export default class TitleComponent1 extends Component {
   state = {
@@ -33,19 +34,30 @@ export default class TitleComponent1 extends Component {
     return (
       <Fragment>
         <div className="d-inline-block pe-3">
-          <Input id="custom-inp-top" size="sm" type="select">
+          {/* <Input id="custom-inp-top" size="sm" type="select">
             <option>Select period...</option>
             <option>Last Week</option>
             <option>Last Month</option>
             <option>Last Year</option>
-          </Input>
+          </Input> */}
+          <ModalExample />
+          {/* <Button
+            className="mb-2 me-2 btn-icon btn-icon-only btn-shadow btn-outline-2x"
+            outline
+            color="light"
+          > */}
+          {/* <i className="lnr-dinner btn-icon-wrapper"> </i> */}
+          {/* <i class="fa fa-fw" aria-hidden="true" title="Copy to use sliders">
+              
+            </i>
+          </Button> */}
         </div>
-        <Button onClick={this.notify22} color="dark" id="Tooltip-123">
+        {/* <Button onClick={this.notify22} color="dark" id="Tooltip-123">
           <FontAwesomeIcon icon={faBatteryThreeQuarters} />
         </Button>
         <UncontrolledTooltip placement="left" target={"Tooltip-123"}>
           Show a Toastify notification example!
-        </UncontrolledTooltip>
+        </UncontrolledTooltip> */}
       </Fragment>
     );
   }
