@@ -1,3 +1,9 @@
+npm install @syncfusion/ej2-react-inputs --save
+
+@import "../node_modules/@syncfusion/ej2-base/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-buttons/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-react-inputs/styles/material.css";
+
 import { detach, select } from '@syncfusion/ej2-base';
 import { UploaderComponent } from '@syncfusion/ej2-react-inputs';
 import * as React from 'react';
