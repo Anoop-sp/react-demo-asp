@@ -1,3 +1,7 @@
+@import "../node_modules/@syncfusion/ej2-base/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-popups/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-navigations/styles/material.css";
+
 import { createRoot } from 'react-dom/client';
 import './index.css';
 import * as React from 'react';
