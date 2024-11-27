@@ -1,4 +1,4 @@
-'use client';
+'use client'; // Needed for client-side rendering
 
 import { Provider } from 'react-redux';
 import { store } from './index';
