@@ -1,35 +1,43 @@
-// app/api/auth/[...nextauth]/route.ts
-
 import NextAuth from "next-auth";
-import PingID from "next-auth/providers/pingid";  // PingID provider for NextAuth.js
+import { NextAuthOptions } from "next-auth";
 
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
   providers: [
-    PingID({
-      clientId: process.env.PINGID_CLIENT_ID!,
-      clientSecret: process.env.PINGID_CLIENT_SECRET!,
-      authorizationUrl: "https://<ping-id-domain>/oauth2/authorize", // PingID authorization URL
-      tokenUrl: "https://<ping-id-domain>/oauth2/token", // PingID token URL
-      userinfoUrl: "https://<ping-id-domain>/userinfo", // PingID user info URL
-    }),
+    {
+      id: "pingid",
+      name: "PingID",
+      type: "oauth",
+      wellKnown: process.env.PINGID_WELL_KNOWN_URL, // The OIDC discovery endpoint for PingID
+      clientId: process.env.PINGID_CLIENT_ID,
+      clientSecret: process.env.PINGID_CLIENT_SECRET,
+      authorization: { params: { scope: "openid profile email" } },
+      checks: ["pkce", "state"], // Ensure security
+    },
   ],
   session: {
-    strategy: "jwt", // Using JWT for session management
+    strategy: "jwt",
   },
   callbacks: {
-    async jwt({ token, account }) {
+    async jwt({ token, account, profile }) {
       if (account) {
-        token.accessToken = account.access_token; // Store the access token in JWT
+        token.id = account.id;
+        token.accessToken = account.access_token;
+      }
+      if (profile) {
+        token.email = profile.email;
       }
       return token;
     },
     async session({ session, token }) {
-      session.accessToken = token.accessToken; // Pass the token to the session object
+      if (token) {
+        session.user = {
+          id: token.id,
+          email: token.email,
+          accessToken: token.accessToken,
+        };
+      }
       return session;
     },
-  },
-  pages: {
-    signIn: "/auth/signin", // Custom sign-in page (optional)
   },
 };
 
