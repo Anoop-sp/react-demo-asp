@@ -1,0 +1,176 @@
+Here’s a **revised set of questions** with a stronger focus on **system design that bridges frontend and backend**, simplified language, and actionable evaluation points for a senior engineer:
+
+---
+
+### **Frontend Questions**  
+#### **1. Authentication Flow with Next.js and Spring Boot**  
+**Question**:  
+*"How would you design a secure login system where the Next.js frontend handles the UI and the Spring Boot backend manages authentication? Explain how tokens are stored, refreshed, and kept safe from attacks."*  
+
+**What to Look For**:  
+- **Answer Should Include**:  
+  - **Token Storage**: HTTP-only cookies (set by Spring Boot) for JWTs.  
+  - **Token Refresh**: Next.js middleware calling a Spring Boot `/refresh-token` endpoint.  
+  - **Security**: CSRF tokens in API headers, avoiding localStorage for sensitive data.  
+  - **Redux Integration**: Using Redux Toolkit to track login state (e.g., `isAuthenticated`).  
+- **Key Evaluation**:  
+  - Does the candidate prioritize security (e.g., HTTP-only cookies)?  
+  - Do they sync frontend state (Redux) with backend token validation?  
+
+---
+
+#### **2. Optimizing a Slow Dashboard in Next.js**  
+**Question**:  
+*"A Next.js dashboard fetches data from a Spring Boot API but loads slowly. How would you speed it up on the frontend and backend?"*  
+
+**What to Look For**:  
+- **Answer Should Include**:  
+  - **Frontend**: Use Next.js Streaming and Suspense to show loading states early.  
+  - **Caching**: Redux Toolkit Query (RTK Query) to cache API responses.  
+  - **Backend**: Spring Boot pagination or compression to reduce payload size.  
+  - **TypeScript**: Shared types between frontend and backend to avoid errors.  
+- **Key Evaluation**:  
+  - Does the candidate optimize both frontend *and* backend?  
+  - Do they mention caching, pagination, or payload optimization?  
+
+---
+
+#### **3. Testing a Complex Form with API Calls**  
+**Question**:  
+*"How would you test a React form that submits data to Spring Boot and shows success/error messages? Include mocking API calls and testing user interactions."*  
+
+**What to Look For**:  
+- **Answer Should Include**:  
+  - **Mocking**: Use Jest or MSW to fake API responses.  
+  - **Redux Tests**: Mock the Redux store to simulate API success/failure.  
+  - **User Flows**: Test form submission, loading states, and error handling.  
+- **Key Evaluation**:  
+  - Do they test all user-facing states (loading, success, error)?  
+  - Do they mock backend APIs realistically?  
+
+---
+
+### **System Design Questions**  
+#### **4. Real-Time Notifications Across Frontend and Backend**  
+**Question**:  
+*"Design a system where users get real-time notifications (e.g., messages) on a Next.js app. The backend uses Spring Boot. How would you handle updates, ensure reliability, and scale to 10k users?"*  
+
+**What to Look For**:  
+- **Answer Should Include**:  
+  - **Frontend**: WebSocket connections in React, Redux for real-time state updates.  
+  - **Backend**: Spring Boot with STOMP over WebSocket for message brokering.  
+  - **Scalability**: Redis for pub/sub messaging and load balancing.  
+  - **Fallbacks**: SSE (Server-Sent Events) if WebSockets fail.  
+- **Key Evaluation**:  
+  - Do they address scalability (e.g., Redis, load balancing)?  
+  - Do they plan for failures (e.g., fallback to SSE)?  
+
+---
+
+#### **5. High-Traffic E-Commerce Platform**  
+**Question**:  
+*"Design an e-commerce site (Next.js + Spring Boot) where product pages load instantly even with 100k users. How would you handle caching, inventory updates, and API retries?"*  
+
+**What to Look For**:  
+- **Answer Should Include**:  
+  - **Frontend**: Static Site Generation (SSG) in Next.js for product pages, client-side hydration for dynamic data.  
+  - **Backend**: Spring Boot caching with Redis, database read replicas for inventory checks.  
+  - **Resilience**: Retry failed API calls (e.g., Axios interceptors) and circuit breakers.  
+  - **TypeScript**: Shared DTOs between Next.js and Spring Boot for consistency.  
+- **Key Evaluation**:  
+  - Do they balance static pre-rendering with dynamic updates?  
+  - Do they design for resilience (retries, caching, load balancing)?  
+
+---
+
+### **Why These Questions Work**:  
+1. **Frontend Focus**: Tests React/Next.js, TypeScript, Redux, and testing skills.  
+2. **System Design**: Forces candidates to connect frontend and backend (e.g., real-time features, caching).  
+3. **Senior-Level Insight**: Evaluates trade-offs (e.g., WebSockets vs. SSE), scalability, and security.  
+
+**Key Observation Points**:  
+- Does the candidate think **holistically** (frontend + backend)?  
+- Do they prioritize **performance**, **security**, and **user experience**?  
+- Are their solutions **pragmatic** (e.g., using Redis instead of reinventing caching)?  
+
+These questions reveal whether the candidate can **architect systems**, not just write code! 🚀
+
+Great question! Let’s break this down clearly:
+
+---
+
+### **Question 4 (Revised): Real-Time Notifications at Scale**  
+**Question**:  
+*"For real-time notifications (e.g., chat, live updates) in a large-scale app, would you use WebSockets or Apache Kafka? How would you integrate your choice with Next.js (frontend) and Spring Boot (backend)?"*  
+
+---
+
+### **Answer**:  
+
+#### **Option 1: WebSockets**  
+- **Best For**:  
+  - Direct, low-latency communication between client and server (e.g., chat apps, live dashboards).  
+  - Bidirectional communication (client ↔ server).  
+- **Implementation**:  
+  - **Frontend**: Use `WebSocket` API in React/Next.js (or libraries like `socket.io-client`).  
+  - **Backend**: Spring Boot with STOMP over WebSocket (`@EnableWebSocketMessageBroker`).  
+  - **Redux**: Sync real-time updates with Redux Toolkit (dispatch actions on message receipt).  
+- **Pros**:  
+  - Real-time, no polling.  
+  - Simple for client-server interaction.  
+- **Cons**:  
+  - Scalability challenges (e.g., 10k+ concurrent connections).  
+  - Requires connection management (e.g., retries, heartbeats).  
+
+---
+
+#### **Option 2: Apache Kafka**  
+- **Best For**:  
+  - High-throughput, distributed event streaming (e.g., notifications for millions of users).  
+  - Decoupling producers (backend services) and consumers (frontend servers).  
+- **Implementation**:  
+  - **Backend**:  
+    - Spring Boot publishes notifications to Kafka topics (e.g., `user-notifications`).  
+    - A separate service consumes Kafka events and pushes updates to clients via WebSockets/SSE.  
+  - **Frontend**:  
+    - Next.js connects to a WebSocket/SSE endpoint (not directly to Kafka).  
+    - Use Redux to manage notifications state.  
+- **Pros**:  
+  - Scales horizontally (handles millions of events/sec).  
+  - Durable, fault-tolerant (events stored in Kafka topics).  
+- **Cons**:  
+  - Adds complexity (requires Kafka infrastructure).  
+  - Not directly client-facing (needs a bridge like WebSockets/SSE).  
+
+---
+
+### **Which is Better for Large Applications?**  
+| **Criteria**         | **WebSockets**                          | **Kafka + WebSockets/SSE**              |  
+|-----------------------|-----------------------------------------|------------------------------------------|  
+| **Scalability**       | Limited by server connections.          | Scales infinitely with Kafka clusters.  |  
+| **Latency**           | Ultra-low (direct client-server).       | Slightly higher (Kafka → bridge → client). |  
+| **Use Case Fit**      | Simple real-time apps (e.g., chat).      | Large-scale apps (e.g., Twitter/X, Uber). |  
+| **Complexity**        | Low (direct integration).               | High (requires Kafka infrastructure).   |  
+
+---
+
+### **Recommendation**:  
+- **For Most Large Apps**: **Kafka + WebSockets/SSE**.  
+  - Kafka handles massive event streaming on the backend.  
+  - A WebSocket/SSE layer bridges Kafka to clients (Next.js).  
+  - Example:  
+    1. User action → Spring Boot publishes event to Kafka.  
+    2. Notification service consumes Kafka event → pushes to client via WebSocket.  
+    3. Next.js updates UI using Redux.  
+
+- **For Simpler Apps**: **Pure WebSockets**.  
+  - Avoid Kafka if you don’t need event durability or horizontal scaling.  
+
+---
+
+### **Key Observation Points**:  
+1. **Trade-off Understanding**: Does the candidate recognize that Kafka alone doesn’t replace WebSockets but complements it?  
+2. **Scalability Strategy**: Do they propose Kafka for backend event streaming + WebSockets/SSE for client delivery?  
+3. **Real-World Pragmatism**: Have they worked with Kafka in production (partitioning, consumer groups)?  
+
+This question tests **system design maturity** – ideal for senior engineers! 🚀
