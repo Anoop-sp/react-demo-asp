@@ -201,3 +201,160 @@ Explanation:
     Step 2: Append the character and its count (if >1) to the result.
 
     Step 3: Return the shorter string (original or compressed).
+
+
+
+TypeScript
+
+    What is type inference in TypeScript?
+
+        Answer: TypeScript automatically infers the type of a variable based on its initial value (e.g., let x = 5 → x is inferred as number).
+
+    How does interface differ from type in TypeScript?
+
+        Answer:
+
+            interface: Can be extended or merged (e.g., interface A extends B).
+
+            type: Defines a fixed shape (union/intersection types) and cannot be re-opened.
+
+Java
+
+    What is autoboxing/unboxing in Java?
+
+        Answer: Automatic conversion between primitives and their wrapper classes (e.g., int ↔ Integer).
+
+Logical Coding Questions
+1. TypeScript: Check if Two Strings are Anagrams
+
+Problem: Write a function to determine if two strings are anagrams (case-insensitive).
+Example:
+typescript
+Copy
+
+Input: "listen", "silent"  
+Output: true  
+
+Solution:
+typescript
+Copy
+
+function areAnagrams(s1: string, s2: string): boolean {  
+  // Normalize: Remove spaces and convert to lowercase  
+  const normalize = (s: string) => s.replace(/\s/g, '').toLowerCase().split('').sort().join('');  
+  return normalize(s1) === normalize(s2);  
+}  
+
+Explanation:
+
+    Normalize: Remove spaces and convert to lowercase.
+
+    Sort Characters: Anagrams have identical sorted character sequences.
+
+    Compare: Check if normalized strings are equal.
+
+2. TypeScript: Find Maximum Subarray Sum (Kadane's Algorithm)
+
+Problem: Given an array of integers, find the contiguous subarray with the largest sum.
+Example:
+typescript
+Copy
+
+Input: [-2, 1, -3, 4, -1, 2, 1, -5, 4]  
+Output: 6 (Subarray [4, -1, 2, 1])  
+
+Solution:
+typescript
+Copy
+
+function maxSubarraySum(nums: number[]): number {  
+  let maxCurrent = nums[0];  
+  let maxGlobal = nums[0];  
+
+  for (let i = 1; i < nums.length; i++) {  
+    maxCurrent = Math.max(nums[i], maxCurrent + nums[i]);  
+    maxGlobal = Math.max(maxGlobal, maxCurrent);  
+  }  
+  return maxGlobal;  
+}  
+
+Explanation:
+
+    Kadane's Algorithm:
+
+        Track maxCurrent (max sum ending at current index).
+
+        Update maxGlobal if maxCurrent exceeds it.
+
+    Why it works: Avoids recomputing sums by leveraging previous results (dynamic programming).
+
+3. Java: Reverse an Array In-Place
+
+Problem: Reverse the elements of an array without using extra space.
+Example:
+java
+Copy
+
+Input: [1, 2, 3, 4, 5]  
+Output: [5, 4, 3, 2, 1]  
+
+Solution:
+java
+Copy
+
+public static void reverseArray(int[] arr) {  
+  int left = 0;  
+  int right = arr.length - 1;  
+  while (left < right) {  
+    int temp = arr[left];  
+    arr[left] = arr[right];  
+    arr[right] = temp;  
+    left++;  
+    right--;  
+  }  
+}  
+
+Explanation:
+
+    Two Pointers: Start with left at index 0 and right at the last index.
+
+    Swap: Swap elements at left and right, then move pointers inward.
+
+    Terminate: Stop when left >= right.
+
+4. Moderate Algorithm: Group Anagrams (Strings/Arrays)
+
+Problem: Given an array of strings, group anagrams together.
+Example:
+typescript
+Copy
+
+Input: ["eat", "tea", "tan", "ate", "nat", "bat"]  
+Output: [["eat","tea","ate"], ["tan","nat"], ["bat"]]  
+
+Solution (TypeScript):
+typescript
+Copy
+
+function groupAnagrams(strs: string[]): string[][] {  
+  const map = new Map<string, string[]>();  
+
+  for (const s of strs) {  
+    const key = s.split('').sort().join(''); // Sort characters to create a key  
+    if (map.has(key)) {  
+      map.get(key)!.push(s);  
+    } else {  
+      map.set(key, [s]);  
+    }  
+  }  
+
+  return Array.from(map.values());  
+}  
+
+Explanation:
+
+    Key Creation: Sort characters of each string to create a unique key for anagrams (e.g., "eat" → "aet").
+
+    Map Grouping: Use the sorted key to group original strings in a hash map.
+
+    Return Values: Extract the grouped arrays from the map.
