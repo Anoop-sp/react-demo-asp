@@ -1,0 +1,203 @@
+1. React: Explain the purpose of useEffect and how dependency arrays work.
+Answer:
+useEffect handles side effects in functional components (e.g., API calls, subscriptions). The dependency array controls when the effect runs:
+
+Empty array ([]): Runs once after initial render (like componentDidMount).
+
+No array: Runs on every render (use sparingly).
+
+Variables in array: Runs when those variables change.
+Example:
+
+javascript
+Copy
+useEffect(() => {
+  fetchData(); // Runs only when `userId` changes
+}, [userId]);
+2. React: Why are keys important in lists?
+Answer:
+Keys help React identify which items have changed, been added, or removed. Without keys, React may re-render the entire list inefficiently. Use unique, stable identifiers (e.g., id instead of array index).
+
+3. React: When would you use Context API vs. Redux?
+Answer:
+
+Context API: Best for prop-drilling avoidance in small/medium apps or static data (e.g., theme, auth).
+
+Redux: Better for complex state management, middleware (thunk/saga), and debugging (DevTools).
+
+4. Java: Compare ArrayList and LinkedList.
+Answer:
+
+ArrayList: Backed by an array. Fast random access (O(1)), slow insertions/deletions (O(n)).
+
+LinkedList: Doubly linked list. Slow random access (O(n)), fast insertions/deletions (O(1)).
+Use ArrayList for frequent reads, LinkedList for frequent modifications.
+
+5. Java: Explain exception handling best practices.
+Answer:
+
+Use specific exceptions (e.g., IOException over generic Exception).
+
+Catch exceptions you can handle; let others propagate.
+
+Use try-with-resources for auto-closing (e.g., streams).
+
+Avoid empty catch blocks.
+
+6. OOP: Provide a real-world example of polymorphism.
+Answer:
+A Shape interface with calculateArea(). Subclasses like Circle and Rectangle implement it differently:
+
+java
+Copy
+Shape circle = new Circle(5);
+Shape rectangle = new Rectangle(4, 6);
+// Both call their own calculateArea() method
+7. TypeScript: What’s the difference between type and interface?
+Answer:
+
+interface: Extendable (extends), mergeable (declaration merging).
+
+type: Can define unions, intersections, and primitives.
+Prefer interface for object shapes; use type for complex types.
+
+8. Java: How to create an immutable class?
+Answer:
+
+Declare class as final (prevents inheritance).
+
+Make fields private and final.
+
+No setter methods.
+
+Return deep copies of mutable objects in getters.
+
+9. React: How to optimize performance in React?
+Answer:
+
+Use React.memo for component memoization.
+
+Use useCallback/useMemo to memoize functions/values.
+
+Virtualize long lists (e.g., react-window).
+
+Code-splitting with React.lazy.
+
+10. TypeScript: How do generics improve type safety? Provide an example.
+Answer:
+Generics enforce type consistency. Example:
+
+typescript
+Copy
+function identity<T>(arg: T): T { return arg; }
+identity<string>("hello"); // Return type is string
+
+
+
+2. Rotate Array (Arrays)
+
+Problem: Rotate an array to the right by k steps.
+Example:
+java
+Copy
+
+Input: nums = [1,2,3,4,5], k = 2  
+Output: [4,5,1,2,3]
+
+Solution (Java):
+java
+Copy
+
+public void rotate(int[] nums, int k) {
+    k %= nums.length;
+    reverse(nums, 0, nums.length - 1); // Reverse entire array
+    reverse(nums, 0, k - 1); // Reverse first k elements
+    reverse(nums, k, nums.length - 1); // Reverse remaining elements
+}
+
+private void reverse(int[] nums, int start, int end) {
+    while (start < end) {
+        int temp = nums[start];
+        nums[start] = nums[end];
+        nums[end] = temp;
+        start++;
+        end--;
+    }
+}
+
+Explanation:
+
+    Step 1: Reverse the entire array. [1,2,3,4,5] → [5,4,3,2,1].
+
+    Step 2: Reverse the first k elements. [5,4,...] → [4,5,...].
+
+    Step 3: Reverse the remaining elements. [...,3,2,1] → [...,1,2,3].
+
+3. Two Sum (Arrays/Algorithm)
+
+Problem: Find two numbers in an array that add up to a target. Return their indices.
+Example:
+typescript
+Copy
+
+Input: nums = [2,7,11,15], target = 9  
+Output: [0,1]
+
+Solution (TypeScript):
+typescript
+Copy
+
+function twoSum(nums: number[], target: number): number[] {
+    const map = new Map<number, number>();
+    for (let i = 0; i < nums.length; i++) {
+        const complement = target - nums[i];
+        if (map.has(complement)) {
+            return [map.get(complement)!, i];
+        }
+        map.set(nums[i], i);
+    }
+    return [];
+}
+
+Explanation:
+
+    Step 1: Use a hash map to store each number’s index.
+
+    Step 2: For each number, check if its complement (target - num) exists in the map.
+
+4. String Compression (Strings/Algorithm)
+
+Problem: Compress a string by replacing repeated characters with their count (e.g., "aabccc" → "a2bc3"). If compressed string is longer, return the original.
+Example:
+java
+Copy
+
+Input: "abbbccd"  
+Output: "ab3c2d" (original is length 7; compressed is 6).
+
+Solution (Java):
+java
+Copy
+
+public String compress(String s) {
+    StringBuilder sb = new StringBuilder();
+    int count = 1;
+    for (int i = 0; i < s.length(); i++) {
+        if (i + 1 < s.length() && s.charAt(i) == s.charAt(i + 1)) {
+            count++;
+        } else {
+            sb.append(s.charAt(i));
+            if (count > 1) sb.append(count);
+            count = 1;
+        }
+    }
+    return sb.length() < s.length() ? sb.toString() : s;
+}
+
+Explanation:
+
+    Step 1: Iterate through the string, counting consecutive characters.
+
+    Step 2: Append the character and its count (if >1) to the result.
+
+    Step 3: Return the shorter string (original or compressed).
