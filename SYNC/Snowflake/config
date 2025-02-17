@@ -1,0 +1,15 @@
+# Snowflake Configuration
+spring.datasource.url=jdbc:snowflake://<account-identifier>.snowflakecomputing.com
+spring.datasource.username=<username>
+spring.datasource.password=<password>
+spring.datasource.driver-class-name=net.snowflake.client.jdbc.SnowflakeDriver
+
+# JPA Configuration
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.SnowflakeDialect
+spring.jpa.hibernate.ddl-auto=validate
+spring.jpa.show-sql=true
+
+# Custom properties
+snowflake.database=<database-name>
+snowflake.schema=<schema-name>
+snowflake.warehouse=<warehouse-name>
