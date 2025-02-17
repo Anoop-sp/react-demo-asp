@@ -1,0 +1,50 @@
+openapi: 3.0.0
+info:
+  title: Limits API
+  version: 1.0.0
+
+paths:
+  /limits:
+    get:
+      summary: Get all limits
+      responses:
+        '200':
+          description: List of limits
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Limit'
+    post:
+      summary: Create new limit
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Limit'
+      responses:
+        '201':
+          description: Limit created successfully
+
+components:
+  schemas:
+    Limit:
+      type: object
+      properties:
+        id:
+          type: integer
+        limitName:
+          type: string
+        maxValue:
+          type: number
+        minValue:
+          type: number
+        effectiveDate:
+          type: string
+          format: date
+      required:
+        - limitName
+        - maxValue
+        - minValue
+        - effectiveDate
