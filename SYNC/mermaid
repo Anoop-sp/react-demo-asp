@@ -1,0 +1,22 @@
+flowchart TD
+    A[User] --> B[Next.js Frontend]
+    B --> C[Spring Boot Backend]
+    C --> D[PingID SSO]
+    C --> E[(Snowflake Database)]
+    E --> F[Workflow Config]
+    E --> G[User Roles]
+    E --> H[Audit Logs]
+
+sequenceDiagram
+    participant User
+    participant Frontend
+    participant Backend
+    participant PingID
+    User->>Frontend: Access application
+    Frontend->>Backend: GET /auth/login
+    Backend->>PingID: Redirect to SSO
+    PingID->>User: MFA challenge (mobile app)
+    User->>PingID: Complete MFA
+    PingID->>Backend: Authorization code
+    Backend->>PingID: Exchange code for JWT
+    Backend->>Frontend: Set session cookie
