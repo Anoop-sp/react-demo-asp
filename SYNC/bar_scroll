@@ -1,76 +1,59 @@
-import { Bar } from '@nivo/bar';
+import { Bar } from '@nivo/bar'
 
-const data = [
-  { category: 'United States of America', A: 130, B: 90 },
-  { category: 'India', A: 200, B: 150 },
-  { category: 'Germany', A: 160, B: 120 },
-  { category: 'United Kingdom', A: 140, B: 110 },
-  { category: 'Canada', A: 120, B: 100 },
-  { category: 'France', A: 180, B: 130 },
-  { category: 'Italy', A: 140, B: 95 },
-];
+const Chart = ({ width }) => {
+  // 1. Verify data calculations
+  const axisMaxValue = Math.max(
+    ...data.flatMap(d => 
+      keys.map(key => Number(d[key]) || 0
+    )
+  )
+  console.log('Calculated max value:', axisMaxValue) // Debug check
 
-const chartHeight = Math.max(400, data.length * 60); // Adjust height dynamically
+  // 2. Axis configuration object
+  const commonAxis = {
+    tickSize: 5,
+    tickPadding: 12,
+    tickRotation: 0,
+    format: v => `${v}`, // Explicit value formatting
+  }
 
-const MyGroupedBarChart = () => {
   return (
-    <div style={{ width: '800px', height: '400px', overflowY: 'auto', position: 'relative' }}>
-      {/* Top Axis (Fixed) */}
-      <div style={{ width: '800px', height: '60px', position: 'absolute', top: 0, background: 'white', zIndex: 10 }}>
+    <div style={{ /* ... unchanged container styles ... */ }}>
+      {/* Fixed Top Axis */}
+      <div style={{ height: 40, width }}> {/* Increased height */}
         <Bar
-          width={800}
-          height={60}
-          data={[]} // Empty data (we only need axis)
-          keys={[]}
-          indexBy="category"
-          layout="horizontal"
-          margin={{ top: 50, right: 60, bottom: 0, left: 180 }}
-          padding={0.2}
+          // ... other props unchanged ...
+          margin={{ left: 60, right: 30, bottom: 10 }} // Added bottom space
           axisTop={{
-            tickSize: 5,
-            tickPadding: 5,
-            tickRotation: 0,
-            legend: 'Values',
-            legendPosition: 'middle',
-            legendOffset: -40,
+            ...commonAxis,
+            tickValues: 5, // Force specific number of ticks
           }}
-          axisLeft={null} // No left axis in this one
-          colors={{ scheme: 'nivo' }}
+          theme={{
+            axis: {
+              ticks: {
+                text: {
+                  fontSize: '12px',
+                  fill: '#000',
+                },
+              },
+            },
+          }}
         />
       </div>
 
-      {/* Scrollable Chart (Without Top Axis) */}
-      <div style={{ height: '400px', overflowY: 'auto', paddingTop: '60px' }}>
-        <Bar
-          width={800}
-          height={chartHeight} // Full height for bars
-          data={data}
-          keys={['A', 'B']}
-          indexBy="category"
-          layout="horizontal"
-          margin={{ top: 0, right: 60, bottom: 50, left: 180 }}
-          padding={0.2} // Balances spacing
-          innerPadding={10} // Adds spacing between bars inside a group
-          axisTop={null} // No top axis here
-          axisLeft={{
-            renderTick: (tick) => (
-              <g transform={`translate(${tick.x},${tick.y})`}>
-                <text
-                  textAnchor={tick.textAnchor}
-                  dominantBaseline="middle"
-                  style={{ fill: '#333', fontSize: '14px', fontWeight: 500, fontFamily: 'Arial, sans-serif' }}
-                >
-                  {tick.value.length > 15 ? tick.value.substring(0, 15) + '…' : tick.value}
-                </text>
-                <title>{tick.value}</title>
-              </g>
-            ),
-          }}
-          colors={{ scheme: 'nivo' }}
-        />
+      {/* Scrollable Body */}
+      <div style={{ flex: 1, overflowY: 'auto', width }}>
+        <div style={{ height: data.length * 60 }}>
+          <Bar
+            // ... other props unchanged ...
+            margin={{ top: 0, right: 30, bottom: 40, left: 60 }} // More bottom margin
+            axisBottom={{
+              ...commonAxis,
+              tickValues: 5, // Match top axis tick count
+            }}
+          />
+        </div>
       </div>
     </div>
-  );
-};
-
-export default MyGroupedBarChart;
+  )
+}
