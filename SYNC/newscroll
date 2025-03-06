@@ -1,0 +1,130 @@
+import { Bar } from '@nivo/bar'
+import { useRef, useState, useEffect } from 'react'
+
+const ScrollableBarChart = ({ data, keys }) => {
+  const containerRef = useRef(null)
+  const [width, setWidth] = useState(800)
+  
+  // 1. Calculate container width
+  useEffect(() => {
+    if (containerRef.current) {
+      setWidth(containerRef.current.offsetWidth)
+    }
+  }, [])
+
+  // 2. Data validation and normalization
+  const validatedData = data.map(d => ({
+    ...d,
+    ...Object.fromEntries(
+      keys.map(key => [key, Number(d[key]) || 0])
+    )
+  }))
+
+  // 3. Calculate max value
+  const axisMaxValue = Math.max(
+    ...validatedData.flatMap(d => 
+      keys.map(key => d[key])
+    )
+  )
+
+  // 4. Common axis configuration
+  const commonAxis = {
+    tickSize: 5,
+    tickPadding: 12,
+    tickRotation: 0,
+    format: v => `${v}`,
+    tickValues: 5
+  }
+
+  // 5. Common chart settings
+  const chartSettings = {
+    keys,
+    indexBy: "id",
+    layout: "horizontal",
+    padding: 0.2,
+    innerPadding: 2,
+    valueScale: { type: 'linear', min: 0, max: axisMaxValue },
+    colors: { scheme: 'nivo' },
+    enableLabel: false,
+    theme: {
+      axis: {
+        ticks: {
+          text: {
+            fontSize: 12,
+            fill: '#333'
+          }
+        }
+      }
+    }
+  }
+
+  return (
+    <div ref={containerRef} style={{ width: '100%', height: '600px' }}>
+      <div style={{ 
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column'
+      }}>
+        {/* Fixed Top Axis */}
+        <div style={{ height: 60, width }}>
+          <Bar
+            {...chartSettings}
+            width={width}
+            height={60}
+            data={validatedData}
+            margin={{ left: 80, right: 40, bottom: 0 }}
+            enableGridX={false}
+            enableGridY={false}
+            axisTop={commonAxis}
+            layers={['grid', 'axesTop']}
+            isInteractive={false}
+          />
+        </div>
+
+        {/* Scrollable Chart Body */}
+        <div style={{ flex: 1, overflowY: 'auto', width }}>
+          <div style={{ height: validatedData.length * 70 }}>
+            <Bar
+              {...chartSettings}
+              width={width}
+              height={validatedData.length * 70}
+              data={validatedData}
+              margin={{ left: 80, right: 40, bottom: 50, top: 0 }}
+              enableGridX={true}
+              axisBottom={commonAxis}
+              axisLeft={{
+                ...commonAxis,
+                tickSize: 0,
+                format: value => validatedData.find(d => d.id === value)?.label || value
+              }}
+              enableLabel={true}
+              labelTextColor="#fff"
+              isInteractive={true}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// Usage example
+const App = () => {
+  const sampleData = [
+    { id: 'group1', label: 'First Group', value1: 45, value2: 78 },
+    { id: 'group2', label: 'Second Group', value1: 92, value2: 65 },
+    { id: 'group3', label: 'Third Group', value1: 33, value2: 89 },
+    // Add more data points...
+  ]
+
+  return (
+    <div style={{ width: '90vw', margin: '0 auto' }}>
+      <ScrollableBarChart 
+        data={sampleData}
+        keys={['value1', 'value2']}
+      />
+    </div>
+  )
+}
+
+export default App
