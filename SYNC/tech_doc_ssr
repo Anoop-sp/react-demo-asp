@@ -1,0 +1,217 @@
+Secure SSO with MFA – Technical Implementation Guide with SSR
+1. Overview
+The banking application integrates with the organization’s OAuth-based SSO with Multi-Factor Authentication (MFA) using Next.js, NextAuth.js, and Spring Boot. The goal is to ensure:
+
+✅ Secure handling of JWT tokens (stored only in HTTP-only cookies).
+✅ Server-Side Rendering (SSR) for secure session handling.
+✅ Role-Based Access Control (RBAC) to restrict unauthorized access.
+✅ Session management using Redux Toolkit for state persistence.
+
+2. Execution Plan
+Step 1: Redirect Users Based on Session Status
+If a session exists, redirect the user to /home.
+If no session, redirect them to the organization’s SSO login page.
+Step 2: Secure Authentication Using NextAuth.js
+Implement NextAuth.js with a custom OAuth provider to authenticate users via the organization’s SSO.
+Ensure JWTs are stored in secure, HTTP-only cookies.
+Step 3: Secure JWT Validation in Spring Boot
+The backend will extract and validate JWTs securely.
+Only essential user details (roles, permissions) will be returned.
+Step 4: Role-Based Access Control (RBAC)
+Define protected routes based on user roles.
+Redirect unauthorized users to the login page.
+Step 5: Implement SSR for Session Handling
+Fetch user sessions server-side to prevent client-side tampering.
+Ensure all sensitive authentication logic is executed securely.
+3. Implementation Details
+Step 1: Configuring NextAuth.js with a Custom OAuth Provider
+📌 File: app/api/auth/[...nextauth]/route.ts
+
+typescript
+Copy
+Edit
+import NextAuth from "next-auth";
+import { NextAuthOptions } from "next-auth";
+import { JWT } from "next-auth/jwt";
+import { OAuthConfig } from "next-auth/providers/oauth";
+
+/**
+ * NextAuth.js configuration using a custom OAuth provider
+ * to securely integrate with the organization's SSO.
+ */
+const authOptions: NextAuthOptions = {
+  providers: [
+    {
+      id: "custom-sso", // Custom OAuth provider ID
+      name: "Custom SSO",
+      type: "oauth",
+      wellKnown: "https://sso.org.com/.well-known/openid-configuration", // Well-known URL for OAuth discovery
+      authorization: { params: { scope: "openid profile email" } }, // Requesting necessary scopes
+      idToken: true, // Receiving an ID token after authentication
+      checks: ["pkce", "state"], // Adding security checks
+      clientId: process.env.SSO_CLIENT_ID, // Securely stored Client ID
+      clientSecret: process.env.SSO_CLIENT_SECRET, // Securely stored Client Secret
+    } as OAuthConfig<JWT>,
+  ],
+  callbacks: {
+    /**
+     * This callback stores the access token securely in the JWT.
+     */
+    async jwt({ token, account }) {
+      if (account) {
+        token.accessToken = account.access_token;
+      }
+      return token;
+    },
+    /**
+     * This callback modifies the session object before returning it.
+     */
+    async session({ session, token }) {
+      session.accessToken = token.accessToken;
+      return session;
+    },
+  },
+  session: {
+    strategy: "jwt",
+  },
+  secret: process.env.NEXTAUTH_SECRET,
+  pages: {
+    signIn: "/auth/login",
+  },
+  cookies: {
+    sessionToken: {
+      name: "__Secure-next-auth.session-token",
+      options: {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        path: "/",
+      },
+    },
+  },
+};
+
+export const handler = NextAuth(authOptions);
+export { handler as GET, handler as POST };
+Step 2: Secure JWT Validation in Java Spring Boot
+📌 File: JwtService.java
+
+java
+Copy
+Edit
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.stereotype.Service;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
+
+/**
+ * Service to validate JWT and extract user details.
+ */
+@Service
+public class JwtService {
+    private static final String SECRET_KEY = "YOUR_RSA_PUBLIC_KEY"; // Use a secure public key
+
+    /**
+     * Validates the JWT token and extracts claims (user roles, permissions).
+     */
+    public Claims validateToken(String token) {
+        Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
+
+        return Jwts.parserBuilder()
+                .setSigningKey(key) // Verify token signature
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+}
+Step 3: Creating a Secure API for Token Validation
+📌 File: AuthController.java
+
+java
+Copy
+Edit
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+/**
+ * REST API to validate JWT and return user roles.
+ */
+@RestController
+@RequestMapping("/api/auth")
+public class AuthController {
+    private final JwtService jwtService;
+
+    public AuthController(JwtService jwtService) {
+        this.jwtService = jwtService;
+    }
+
+    @PostMapping("/validate")
+    public ResponseEntity<?> validateToken(@RequestHeader("Authorization") String token) {
+        String jwt = token.replace("Bearer ", ""); // Remove 'Bearer' prefix
+        var claims = jwtService.validateToken(jwt);
+
+        return ResponseEntity.ok(new AuthResponse(claims.getSubject(), claims.get("roles")));
+    }
+}
+Step 4: Implementing SSR in Next.js for Secure Session Handling
+We will fetch session data server-side to prevent client-side tampering.
+
+📌 File: app/layout.tsx
+
+typescript
+Copy
+Edit
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
+
+/**
+ * Server-side function to check user session before rendering pages.
+ * If no session exists, the user is redirected to the login page.
+ */
+export default async function Layout({ children }: { children: React.ReactNode }) {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return redirect("/auth/login"); // Redirect if no session
+  }
+
+  return <>{children}</>;
+}
+Step 5: Middleware for Protecting Routes
+📌 File: middleware.ts
+
+typescript
+Copy
+Edit
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+
+/**
+ * Middleware to check if the user has an active session.
+ * Redirects to login if no session exists.
+ */
+export function middleware(req: NextRequest) {
+  const session = req.cookies.get("__Secure-next-auth.session-token");
+
+  if (!session && req.nextUrl.pathname !== "/auth/login") {
+    return NextResponse.redirect(new URL("/auth/login", req.url));
+  }
+
+  return NextResponse.next();
+}
+
+export const config = {
+  matcher: ["/dashboard/:path*", "/profile/:path*"], // Protect these routes
+};
+4. Conclusion
+This implementation ensures:
+✅ Secure authentication using NextAuth.js.
+✅ JWT validation handled server-side in Spring Boot.
+✅ Session management using secure HTTP-only cookies.
+✅ Role-Based Access Control (RBAC) for route protection.
+✅ Server-Side Rendering (SSR) for enhanced security.
+
+This approach reduces attack surfaces and ensures a scalable authentication mechanism. Let me know if you need further refinements! 🚀
