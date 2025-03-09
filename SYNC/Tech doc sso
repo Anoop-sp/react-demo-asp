@@ -1,0 +1,260 @@
+Secure SSO with MFA Integration – Technical Specification
+Overview
+The banking application requires integration with the organization’s OAuth-based Single Sign-On (SSO) with Multi-Factor Authentication (MFA). The implementation must ensure secure handling of JWT tokens and user details, preventing data loss and vulnerabilities.
+
+Authentication Flow
+1. User Accesses Application:
+If an active session exists, redirect the user to the home page (/home).
+If no active session, redirect the user to the organization’s SSO login page via the well-known API.
+2. SSO Authentication & MFA Process:
+The user authenticates with credentials & MFA on the organization’s login page.
+Upon successful authentication, the organization redirects to the application's callback URL with a JWT token.
+3. Token Processing & Session Creation:
+The Next.js frontend (using NextAuth.js with a custom provider) extracts the JWT token securely.
+Instead of direct client-side extraction, the Java Spring Boot API extracts and validates the JWT to enhance security.
+User details (roles, permissions, token expiration, etc.) are extracted securely from the JWT payload.
+A secure session is established using Redux Toolkit for state management.
+4. Token Storage & Security Considerations:
+Store the JWT token only in HTTP-only, Secure, and SameSite-Strict cookies to prevent XSS attacks.
+Do not store JWT in localStorage/sessionStorage.
+Implement a refresh token mechanism to ensure session continuity securely.
+Implement Role-Based Access Control (RBAC) to restrict route access based on user roles.
+Example SSO Flow
+User visits https://bankingapp.com
+Application checks for an active session:
+Session exists? → Redirect to https://bankingapp.com/home
+No session? → Redirects user to:
+bash
+Copy
+Edit
+https://sso.org.com/login?redirect_uri=https://bankingapp.com/auth/callback
+User authenticates and completes MFA on the organization’s SSO page.
+The organization redirects to the application:
+arduino
+Copy
+Edit
+https://bankingapp.com/auth/callback?token=eyJhbGciOiJIUzI1NiIs...
+NextAuth.js (with a custom provider) processes the token:
+Calls the Java API to extract & validate the JWT securely.
+Extracts user data (roles, permissions, expiration, etc.).
+Stores a secure session in cookies.
+User is redirected to the home page.
+Security Considerations
+JWT Validation: Use server-side verification (Spring Boot) instead of client-side validation.
+CSRF Protection: Use SameSite cookies and anti-CSRF tokens.
+HTTPS Enforcement: Ensure all authentication and API calls use HTTPS only.
+Token Expiry & Refresh:
+Set short-lived access tokens.
+Implement secure refresh tokens for session renewal.
+JWT Signature Algorithms:
+Use RS256 (asymmetric encryption) instead of HS256.
+Limit JWT Payload Exposure:
+Avoid storing sensitive user data inside the token.
+Implementation Details
+1. Calling Well-Known URL with NextAuth.js Custom Provider
+Use the next-auth library with a custom OAuth provider to avoid exposing built-in providers.
+The custom provider should dynamically call the well-known URL for discovery.
+2. Secure JWT Extraction Using Java API
+Instead of handling JWT validation in the frontend, delegate it to a secure Java Spring Boot API.
+The backend extracts user details from JWT and returns only necessary information.
+
+
+
+**# Secure Single Sign-On (SSO) with Multi-Factor Authentication (MFA) in Next.js & Java Spring Boot**
+
+This document provides a **detailed implementation plan** for integrating **SSO with MFA using PingID** in a **Next.js frontend** (using NextAuth.js) and a **Java Spring Boot backend**. It includes **plain English explanations**, **step-by-step execution flow**, and **extensive inline comments** in the code.
+
+---
+
+## **1. Overview of the Implementation**
+
+- The application will use **PingID SSO for authentication**.
+- The user will be redirected to the **organization’s SSO page** if they are not authenticated.
+- Upon successful authentication and MFA verification, the SSO provider will return a **JWT token**.
+- NextAuth.js will **extract the user details** from this token and store them in a **secure session**.
+- The Next.js app will send the token to a **Spring Boot API for validation**.
+- The backend will **verify the token, extract roles and permissions**, and return relevant data to the frontend.
+- The application will enforce **Role-Based Access Control (RBAC)** to restrict access to pages.
+
+---
+
+## **2. High-Level Execution Plan**
+
+### **Step 1: Configure NextAuth.js for SSO Authentication**
+- Setup NextAuth.js with a **custom OAuth provider** using PingID.
+- Define a **secure session storage mechanism**.
+
+### **Step 2: Redirect Users to SSO If Not Authenticated**
+- Use **middleware** in Next.js to check if a user is logged in.
+- If not logged in, redirect them to the **SSO login page**.
+
+### **Step 3: Handle the Authentication Callback**
+- After successful SSO authentication, the provider **returns a JWT**.
+- Extract the **user details** and store them securely in the session.
+
+### **Step 4: Validate JWT on the Backend**
+- The Next.js app sends the JWT token to a **Spring Boot API**.
+- The backend verifies the **signature, expiration, and claims**.
+
+### **Step 5: Implement Role-Based Access Control (RBAC)**
+- Restrict access to certain pages based on **user roles**.
+- Store user roles securely and check permissions before rendering pages.
+
+### **Step 6: Enhance Security**
+- Store session tokens in **secure, HTTP-only cookies**.
+- Enforce **HTTPS and CSRF protection**.
+
+---
+
+## **3. Implementation Details with Code**
+
+### **Step 1: Configure NextAuth.js for SSO Authentication**
+
+File: `app/api/auth/[...nextauth]/route.ts`
+
+```typescript
+import NextAuth from "next-auth";
+import { NextAuthOptions } from "next-auth";
+import { OAuthConfig } from "next-auth/providers/oauth";
+
+const authOptions: NextAuthOptions = {
+  providers: [
+    {
+      id: "custom-sso",
+      name: "Custom SSO",
+      type: "oauth",
+      wellKnown: "https://sso.org.com/.well-known/openid-configuration",
+      authorization: { params: { scope: "openid profile email" } },
+      idToken: true,
+      checks: ["pkce", "state"], // PKCE ensures secure authentication
+      clientId: process.env.SSO_CLIENT_ID,
+      clientSecret: process.env.SSO_CLIENT_SECRET,
+    } as OAuthConfig<any>,
+  ],
+  
+  callbacks: {
+    async jwt({ token, account }) {
+      if (account) {
+        token.accessToken = account.access_token; // Store the access token
+      }
+      return token;
+    },
+    
+    async session({ session, token }) {
+      session.accessToken = token.accessToken; // Attach access token to session
+      return session;
+    },
+  },
+  
+  session: {
+    strategy: "jwt", // Use JWT-based session management
+  },
+  
+  secret: process.env.NEXTAUTH_SECRET,
+  
+  cookies: {
+    sessionToken: {
+      name: "__Secure-next-auth.session-token",
+      options: {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production", // Only allow secure cookies in production
+        sameSite: "strict",
+        path: "/",
+      },
+    },
+  },
+};
+
+export const handler = NextAuth(authOptions);
+export { handler as GET, handler as POST };
+```
+
+### **Step 2: Implement Secure JWT Validation in Java Spring Boot**
+
+File: `JwtService.java`
+
+```java
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.stereotype.Service;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
+
+@Service
+public class JwtService {
+    private static final String SECRET_KEY = "YOUR_RSA_PUBLIC_KEY"; // Replace with actual key
+
+    public Claims validateToken(String token) {
+        Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
+
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+}
+```
+
+### **Step 3: Create an API for Secure JWT Validation**
+
+File: `AuthController.java`
+
+```java
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/auth")
+public class AuthController {
+    private final JwtService jwtService;
+
+    public AuthController(JwtService jwtService) {
+        this.jwtService = jwtService;
+    }
+
+    @PostMapping("/validate")
+    public ResponseEntity<?> validateToken(@RequestHeader("Authorization") String token) {
+        String jwt = token.replace("Bearer ", "");
+        var claims = jwtService.validateToken(jwt);
+
+        return ResponseEntity.ok(new AuthResponse(claims.getSubject(), claims.get("roles")));
+    }
+}
+```
+
+### **Step 4: Protect Next.js Pages Using Middleware**
+
+File: `middleware.ts`
+
+```typescript
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+
+export function middleware(req: NextRequest) {
+  const session = req.cookies.get("__Secure-next-auth.session-token");
+
+  if (!session && req.nextUrl.pathname !== "/auth/login") {
+    return NextResponse.redirect(new URL("/auth/login", req.url));
+  }
+
+  return NextResponse.next();
+}
+
+export const config = {
+  matcher: ["/dashboard/:path*", "/profile/:path*"],
+};
+```
+
+---
+
+## **4. Conclusion**
+
+- This setup ensures a **secure authentication flow** with **PingID SSO & MFA**.
+- **Session management** is handled via **JWT with secure cookies**.
+- **RBAC is enforced** to restrict unauthorized access.
+- **CSRF protection and HTTPS enforcement** are included.
+
+This approach ensures **scalability, security, and maintainability** for enterprise applications.
+
