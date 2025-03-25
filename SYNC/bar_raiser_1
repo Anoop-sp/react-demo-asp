@@ -1,0 +1,39 @@
+Situation:
+I joined CBA nine months ago and was assigned a modernization project for products in REX, which involves migrating:
+•	200+ Tableau dashboards
+•	Complex workflows built in Pega
+The goal is to replace these legacy systems with a modern microservices-based cloud architecture. The primary challenge lies in the complexity of Tableau and Pega, requiring specialized expertise from existing teams. Additionally, we rely on both onshore and offshore teams managing these technologies, making collaboration crucial.
+________________________________________
+Task:
+To effectively drive the project forward, I needed to:
+✔ Understand the existing system – Conduct an in-depth analysis of Tableau and Pega implementations.
+✔ Engage with business users – Gather insights into critical functionalities and use cases.
+✔ Perform a detailed technical analysis – Document architecture, data flow, and integration patterns.
+✔ Conduct Proof of Concepts (POCs) – Validate feasibility and improvements.
+✔ Ensure seamless collaboration – Work across teams without disrupting their ongoing priorities.
+✔ Automate CI/CD and testing – Implement reliable pipelines to accelerate deployments while maintaining quality.
+________________________________________
+Action (Breaking Down Workstreams)
+1. Tableau Dashboards Modernization:
+✅ Partnered with onshore and offshore Tableau teams to analyze current dashboard usage, dependencies, and pain points.
+✅ Worked closely with business users to understand use cases, ensuring that the new solution aligns with their needs.
+✅ Conducted a POC for selected dashboards, demonstrating performance improvements and cloud integration benefits.
+✅ Designed a scalable data pipeline for seamless data ingestion and visualization.
+✅ Established a phased migration plan that minimized disruptions to reporting workflows.
+2. Pega Workflow Transformation:
+✅ Engaged with Pega specialists to assess existing workflows and business rules.
+✅ Conducted a POC for re-architecting workflows in a microservices-based system, showcasing improved flexibility and automation.
+✅ Defined a structured migration strategy, ensuring compliance with regulatory and operational requirements.
+✅ Integrated key functionalities into the new system while maintaining business continuity.
+________________________________________
+Collaboration & Team Management:
+✔ Created a cross-functional team with members from both Sydney and India, ensuring 24/7 progress and faster decision-making.
+✔ Managed dependencies across teams by scheduling non-intrusive knowledge-sharing sessions.
+✔ Ensured that onshore and offshore teams could continue their deliverables without disruptions.
+✔ Facilitated cross-team discussions, proactively identifying roadblocks and aligning stakeholders to drive project success.
+✔ Took an obsessive approach to understanding customer needs, ensuring that every migration and enhancement directly improves the end-user experience.
+________________________________________
+Outcome & Ongoing Progress:
+🚀 The project is currently in development, and early POCs have demonstrated significant improvements in efficiency, automation, and scalability.
+🚀 With automated CI/CD pipelines, rigorous testing, and cloud best practices, the project is ensuring a secure, scalable, and high-performing system.
+🚀 By fostering strong team collaboration and customer-first thinking, we are ensuring a smooth transition from legacy systems while minimizing business disruptions.
