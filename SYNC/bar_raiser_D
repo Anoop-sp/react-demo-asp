@@ -1,0 +1,42 @@
+1. Answer Using STAR Method Incorporating CBA’s Leadership Principles (Revised for Ongoing Project):
+
+Situation:
+Nine months ago, I joined CBA and was tasked with modernizing REX products by migrating 200+ legacy Tableau dashboards and complex Pega workflows to a modern microservices-based cloud architecture. The project is ongoing, with phased milestones focused on balancing migration progress with minimal disruption to business operations. Key challenges include coordinating specialized onshore/offshore teams (Tableau and Pega) and managing cross-crew dependencies while aligning with regulatory requirements.
+
+Task:
+As the project lead, my role is to drive iterative progress, validate technical feasibility through phased proofs of concept (POCs), and ensure seamless collaboration across teams with competing priorities. Critical objectives include maintaining business continuity, fostering shared ownership, and aligning deliverables with CBA’s broader modernization roadmap.
+
+Action:
+
+Lead as an Owner:
+
+Proactive Dependency Management: I mapped cross-team dependencies early, identifying risks such as overlapping resource demands between Tableau and Pega teams. For example, when infrastructure delays threatened the Tableau cloud pipeline rollout, I negotiated priority access by aligning stakeholders on shared goals, ensuring the timeline stayed on track.
+
+Ownership of Iterative Outcomes: I instituted biweekly checkpoints with business users to validate migrated dashboards and workflows against their requirements. During one sprint, feedback revealed a misalignment in a Pega workflow’s automation logic, which I escalated and resolved by coordinating a joint session between Pega specialists and business analysts.
+
+Create Exceptional Teams:
+
+Leveraging Distributed Expertise: To address knowledge silos, I partnered with offshore Pega teams to co-design a modular migration framework, allowing parallel workstreams (e.g., business rule extraction vs. microservice development). This reduced bottlenecks and empowered offshore teams to lead specific components autonomously.
+
+Collaborative Rituals for Alignment: I introduced lightweight, cross-crew “sync-and-share” sessions where Tableau and Pega teams demo incremental progress. For instance, the Tableau team’s dashboard optimization techniques inspired the Pega team to adopt similar caching strategies, improving workflow performance.
+
+Result (Ongoing):
+
+Current Progress: 60% of Tableau dashboards have been migrated, with a 35% reduction in latency observed in early adopters. For Pega, 40% of workflows are re-architected, and automation errors have decreased by 20% in deployed modules.
+
+Cultural Impact: The dependency mapping and sync-and-share rituals have been adopted by two other crews, improving cross-team transparency. Business users report higher confidence in the phased approach due to iterative feedback loops.
+
+Scalability Foundations: The modular framework for Pega migration has enabled onboarding of additional offshore developers, accelerating delivery without sacrificing quality.
+
+Leadership Principles Highlighted:
+
+Lead as an Owner: Drove accountability by resolving cross-team blockers and embedding iterative validation to ensure outcomes align with business needs.
+
+Create Exceptional Teams: Broke down silos by designing rituals that foster trust, shared learning, and autonomy across distributed teams.
+
+Next Steps:
+Continuing to prioritize high-impact dashboards and workflows while refining the migration playbook. A key focus is scaling the collaboration model to include security and compliance teams earlier in the process, ensuring alignment with CBA’s evolving regulatory landscape.
+
+This approach emphasizes adaptability, continuous alignment, and empowering teams to own their contributions—key to sustaining momentum in long-term, complex modernization efforts.
+
+2. 
