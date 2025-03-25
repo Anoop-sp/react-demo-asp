@@ -37,3 +37,62 @@ Outcome & Ongoing Progress:
 🚀 The project is currently in development, and early POCs have demonstrated significant improvements in efficiency, automation, and scalability.
 🚀 With automated CI/CD pipelines, rigorous testing, and cloud best practices, the project is ensuring a secure, scalable, and high-performing system.
 🚀 By fostering strong team collaboration and customer-first thinking, we are ensuring a smooth transition from legacy systems while minimizing business disruptions.
+
+
+
+
+
+
+2
+
+Situation
+When I joined CBA’s REX modernization project, we had to migrate 200+ Tableau dashboards and complex Pega workflows to a microservices-based cloud architecture.
+
+Two junior associate engineers were assigned to the project:
+
+One had experience in frontend development but limited backend knowledge.
+
+The other had experience in backend development but minimal exposure to frontend technologies.
+
+However, the project demanded full-stack capabilities, and the knowledge gap led to:
+❌ Slow feature development, as tasks required constant handoffs.
+❌ Code inconsistencies, since each engineer lacked expertise in half of the stack.
+❌ Low confidence, as they felt overwhelmed by unfamiliar technologies.
+
+Task
+I needed to:
+✔ Mentor both engineers to become full-stack developers, equipping them with skills across frontend, backend, and cloud infrastructure.
+✔ Improve development efficiency, enabling them to handle features end-to-end.
+✔ Foster a collaborative learning environment, where they could share knowledge and support each other.
+
+Action
+Following CBA’s leadership principles, I designed a structured coaching plan:
+
+1️⃣ Hands-On Learning & Pair Programming (Be Curious and Humble)
+
+Backend-focused engineer: Assigned React UI tasks to build hands-on experience.
+
+Frontend-focused engineer: Assigned Spring Boot microservices to strengthen backend skills.
+
+Pair programming sessions ensured knowledge-sharing and confidence-building.
+
+2️⃣ Guided Project Work with Gradual Complexity
+
+Initially assigned small independent tasks to build confidence.
+
+Progressed to full-stack user stories, where each engineer handled both frontend and backend components.
+
+Encouraged code reviews between them, reinforcing peer learning and feedback culture.
+
+3️⃣ Knowledge Sharing & Collaboration (Create Exceptional Teams)
+
+Introduced weekly tech-sharing sessions, where each engineer taught the other their area of expertise.
+
+Created documentation and reusable code templates, reducing onboarding time for new engineers.
+
+Encouraged them to lead discussions in sprint reviews, strengthening communication and stakeholder engagement.
+
+Result
+🚀 Both engineers transitioned into full-stack roles, becoming self-sufficient in handling end-to-end features.
+🚀 Development velocity improved by 35%, as they no longer relied on constant handoffs.
+🚀 Their code quality improved significantly, as they gained a deeper understanding of the entire stack.
