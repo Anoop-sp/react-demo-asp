@@ -152,3 +152,53 @@ Reflections & What I Would Do Differently
 🔹 Introduce AI-driven observability tools for proactive issue detection.
 
 By automating deployments, we streamlined the SDLC, improved efficiency, and fostered a culture of collaboration and continuous improvement at CBA. 🚀
+
+
+4
+
+Situation
+As part of the REX modernization project at CBA, we were migrating 200+ Tableau dashboards and complex Pega workflows to a microservices-based cloud architecture.
+
+🚧 Challenges:
+
+Junior engineers assigned to frontend and backend roles lacked full-stack expertise, slowing down development.
+
+Context switching between multiple tasks disrupted focus and reduced efficiency.
+
+Unstructured collaboration between onshore and offshore teams led to misalignment and rework.
+
+Task
+I needed to:
+✔ Create a structured engineering workflow to minimize distractions and increase productivity.
+✔ Enable full-stack development skills for frontend and backend engineers to improve flexibility.
+✔ Reduce context switching by optimizing sprint planning and developer workflows.
+
+Action
+Aligning with CBA’s leadership principles, I took a systematic approach to improve engineering effectiveness:
+
+1️⃣ Implementing Focused Workflows (Be Curious and Humble)
+Conducted developer feedback sessions to understand pain points and blockers.
+
+Implemented ‘Flow Fridays’, reserving uninterrupted deep-work time to minimize distractions.
+
+Introduced feature-based development, reducing dependencies and enabling engineers to work autonomously.
+
+2️⃣ Upskilling Junior Engineers in Full-Stack Development (Create Exceptional Teams)
+Paired frontend and backend engineers in cross-functional learning pods to enhance their full-stack capabilities.
+
+Organized bi-weekly tech talks covering backend APIs, frontend state management, and cloud deployment.
+
+Created hands-on coding challenges to encourage continuous learning.
+
+3️⃣ Optimizing Sprint Planning & Collaboration
+Reduced WIP (Work in Progress) limits in JIRA to ensure engineers focused on fewer, high-impact tasks.
+
+Established overlap hours for real-time collaboration between onshore and offshore teams, reducing handover delays.
+
+Implemented automated status updates via Slack and Confluence, decreasing unnecessary meetings.
+
+Results & Measurement
+📈 40% improvement in feature velocity, as measured by sprint burndown charts.
+📈 Developer satisfaction scores improved from 6.5 to 8.9 (based on team surveys).
+📈 Context switching reduced by 50%, enabling engineers to stay in flow for longer periods.
+📈 80% of junior engineers achieved full-stack proficiency within 6 months.
