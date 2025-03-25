@@ -1,0 +1,65 @@
+1. Scaling Software Engineering at CBA – STAR Response
+Situation:
+Nine months ago, I joined CBA and was assigned to a modernization project for products in REX. The initiative involves migrating:
+
+200+ Tableau dashboards
+
+Complex Pega workflows
+
+The objective is to replace these legacy systems with a microservices-based cloud architecture while ensuring business continuity. The primary challenge has been the complexity of Tableau and Pega, requiring specialized expertise, along with cross-team dependencies on both onshore and offshore teams.
+
+Task:
+As part of this ongoing project, my responsibilities include:
+
+Understanding the existing system – Deep diving into Tableau and Pega implementations.
+
+Engaging business users – Capturing use cases and critical functionalities.
+
+Performing a detailed technical analysis – Categorizing systems, documenting architecture, data flow, deployment, and integrations.
+
+Conducting Proof of Concepts (POCs) – Demonstrating feasibility and business value.
+
+Managing cross-team collaboration – Ensuring smooth coordination with multiple teams without disrupting their ongoing work.
+
+Action (Ongoing Work & Progress So Far):
+
+🔹 Tableau Dashboards Modernization
+
+Partnered with onshore and offshore Tableau teams to analyze dashboard dependencies and pain points.
+
+Engaged with business users to prioritize dashboards based on impact.
+
+Completed a POC, showcasing performance improvements and cloud integration.
+
+Designed a scalable data pipeline for seamless data ingestion and visualization.
+
+Currently working on a phased migration plan that minimizes disruptions while aligning with business needs.
+
+🔹 Pega Workflow Transformation
+
+Engaged with Pega specialists to assess existing workflows and business rules.
+
+Completed a POC for re-architecting workflows using a microservices-based approach, improving flexibility and automation.
+
+Defined a structured migration strategy, ensuring compliance with operational and regulatory requirements.
+
+Currently in the process of integrating key functionalities into the new system while ensuring a smooth transition for users.
+
+🔹 Cross-Team Collaboration & Leadership
+
+Lead as an Owner: Taken full ownership of dependencies, driving coordination across business, engineering, and platform teams.
+
+Create Exceptional Teams: Fostered cross-team collaboration, scheduling non-intrusive knowledge-sharing sessions with onshore and offshore teams.
+
+Ensured teams can continue their regular deliverables while actively contributing to the modernization effort.
+
+Proactively addressed roadblocks by aligning key stakeholders, ensuring progress without bottlenecks.
+
+Current Status & Next Steps:
+✅ POCs Completed for both Tableau and Pega migration.
+🚧 Migration Planning & Implementation Ongoing, ensuring minimal disruption to operations.
+🔜 Iterative Rollout Strategy – Implementing phased deployments with regular business validation.
+
+The project remains a collaborative effort across multiple teams, and our structured approach ensures we stay aligned with business goals while maintaining agility in execution.
+
+2. 
