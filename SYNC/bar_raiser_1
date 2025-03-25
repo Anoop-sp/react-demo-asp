@@ -96,3 +96,59 @@ Result
 🚀 Both engineers transitioned into full-stack roles, becoming self-sufficient in handling end-to-end features.
 🚀 Development velocity improved by 35%, as they no longer relied on constant handoffs.
 🚀 Their code quality improved significantly, as they gained a deeper understanding of the entire stack.
+
+3
+
+Situation
+As part of CBA’s REX modernization project, we were migrating 200+ Tableau dashboards and Pega workflows to a microservices-based cloud architecture. A major bottleneck in the development process was the manual deployment process, which led to:
+❌ Frequent deployment failures due to human errors.
+❌ Slow release cycles, delaying feature delivery.
+❌ Lack of visibility, making it difficult to track deployment status and failures.
+
+Task
+I needed to:
+✔ Automate the deployment process to ensure efficiency, reliability, and quality.
+✔ Implement a CI/CD pipeline that integrated automated testing, monitoring, and rapid feedback.
+✔ Foster collaboration between developers, testers, and DevOps teams to streamline deployments.
+
+Action
+Following CBA’s leadership principles, I took a structured approach to automation:
+
+1️⃣ CI/CD Pipeline Implementation (Create Exceptional Teams)
+
+Designed and implemented a CI/CD pipeline using GitHub Actions and AWS CodePipeline for deploying Next.js frontend, Java Spring Boot backend, and Snowflake database changes.
+
+Integrated automated testing (unit, integration, and security tests) into the pipeline.
+
+Used infrastructure as code (Terraform) to ensure consistent and repeatable cloud deployments.
+
+2️⃣ Automated Testing & Rapid Feedback (Obsess Over Customers)
+
+Unit tests (Jest for frontend, JUnit for backend) executed on every pull request.
+
+Integration tests validated API endpoints and database interactions.
+
+Static code analysis & security scans (SonarQube, Snyk) ensured code quality and compliance.
+
+Slack notifications provided real-time feedback on pipeline status.
+
+3️⃣ Monitoring & Continuous Improvement
+
+Set up logging and monitoring (AWS CloudWatch, ELK stack) for tracking deployment issues.
+
+Established automated rollback strategies to prevent downtime.
+
+Conducted post-mortem reviews to analyze failures and continuously improve the pipeline.
+
+Result
+🚀 Deployment time reduced by 60%, accelerating feature releases.
+🚀 Deployment success rate increased to 98%, minimizing production issues.
+🚀 Developers received real-time feedback, improving code quality and collaboration.
+🚀 Standardized processes ensured smooth onboarding for new engineers.
+
+Reflections & What I Would Do Differently
+🔹 Implement feature flagging earlier to enable safer rollouts.
+🔹 Enhance test coverage metrics to identify potential gaps.
+🔹 Introduce AI-driven observability tools for proactive issue detection.
+
+By automating deployments, we streamlined the SDLC, improved efficiency, and fostered a culture of collaboration and continuous improvement at CBA. 🚀
