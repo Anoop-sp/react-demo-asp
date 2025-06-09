@@ -1,0 +1,116 @@
+### Workflow Management System - Detailed Requirements  
+
+#### **1. Workflow Configuration**  
+- **Workflow Types**: Support multiple types (e.g., "Breach Case", "Delegation Change")  
+- **Steps & Approvers**:  
+  - Each step must allow:  
+    - Individual approvers (e.g., `user@company.com`)  
+    - Single group (e.g., `EMMRO`)  
+    - Multiple groups (e.g., `Group1` + `Group2`)  
+  - Configurable requirements per group:  
+    - Minimum approvals required (e.g., "2 approvals from Group1")  
+    - Member assignment capability (e.g., "Require approvals from UserA + UserB in Group1")  
+
+#### **2. Case Management**  
+- **Parent-Child Cases**:  
+  - Single request can spawn multiple cases (e.g., Delegation Change → CaseA, CaseB, CaseC)  
+  - All child cases share a `parent_case_id`  
+- **Dynamic Form Data**:  
+  - Store workflow-specific form fields (e.g., breach details, delegation scope)  
+  - Forms must be configurable per workflow type  
+
+#### **3. Approval System**  
+- **Step Transitions**:  
+  - Track current step (e.g., "Level 1: EMMRO Approval")  
+  - Update approval state when step changes  
+- **Approval Rules**:  
+  - Support multi-group approvals with custom thresholds  
+    *Example: "Step 2 requires 2 approvals from GroupA and 3 from GroupB"*  
+  - Allow member-level assignments (e.g., "Require UserX and UserY from GroupA")  
+
+#### **4. Query Requirements**  
+- **Critical Filters**:  
+  - Fetch cases by current approval group (e.g., `WHERE current_group = 'EMMRO'`)  
+  - Find cases needing action by specific user (considering group memberships)  
+- **Performance Constraints**:  
+  - Response time < 500ms for 10M+ records  
+  - Support concurrent dashboard/reporting queries  
+
+#### **5. Notification System**  
+- **Deadline Alerts**:  
+  - Notify approvers when deadlines approach  
+  - Escalate overdue approvals  
+- **Custom Triggers**:  
+  - Notify stakeholders when subtype is selected (e.g., "Policy Change" chosen)  
+
+#### **6. Audit & History**  
+- **Point-in-Time Visibility**:  
+  - View case state at any historical timestamp  
+- **Action Tracking**:  
+  - Log subtype selections, approvals, and comments  
+
+#### **7. Data Handling**  
+- **Storage Optimization**:  
+  - Minimize writes per case creation (goal: ≤ 2 inserts)  
+  - Separate high-churn data (e.g., comments → transient tables)  
+- **Scalability Targets**:  
+  - 2M+ new cases daily  
+  - 100K+ concurrent users  
+
+#### **8. Technical Environment**  
+- **Stack**:  
+  - Frontend: Next.js + TypeScript  
+  - Backend: Java Spring Boot  
+  - Database: Snowflake  
+  - Deployment: GitHub Actions → AWS ECS/Docker  
+- **Snowflake Features**:  
+  - Required: Clustering, Search Optimization, Time Travel  
+  - Recommended: Materialized Views, Snowpipe  
+
+#### **9. Non-Functional Requirements**  
+- **Performance**:  
+  - Case creation latency < 1s (99th percentile)  
+  - Approval state updates < 500ms  
+- **Cost Efficiency**:  
+  - Storage: Use transient tables for audit/comments  
+  - Compute: Auto-suspend warehouses after 2min idle  
+- **Maintainability**:  
+  - Avoid over-normalization (max 8 core tables)  
+  - Schema changes without downtime  
+
+#### **10. Key Use Cases**  
+1. **Delegation Change Workflow**:  
+   - Parent case → Multiple child cases (one per delegation type)  
+   - Step 1: `EMMRO` group approval (1 approval min)  
+   - Step 2: Multi-group approval (2 from `STAKE1`, 3 from `STAKE2`)  
+   - Subtype selection at Step 2 (e.g., "Policy Change")  
+
+2. **Breach Case Workflow**:  
+   - Step 1: Individual approver (`compliance-officer@company.com`)  
+   - Step 2: `LEGAL` group approval (all members must approve)  
+
+#### **11. Open Questions**  
+- Should approval groups support hierarchical structures?  
+- How to handle dynamic group membership changes mid-approval?  
+- Retention policy for completed cases (e.g., 6mo hot storage → S3 archive)?  
+
+--- 
+
+### Summary of Critical Needs  
+1. **Flexible Approver Configuration**:  
+   - Mix of individuals/groups with custom approval rules  
+2. **High-Performance Queries**:  
+   - Sub-second filtering by approval group/user  
+3. **Efficient Parent-Child Cases**:  
+   - Minimal overhead for multi-case requests  
+4. **Snowflake-Optimized Schema**:  
+   - Leverage clustering/search optimization  
+   - Cost control via transient tables  
+5. **Real-Time Notifications**:  
+   - Deadline tracking with escalation  
+
+> Let me know if you need:  
+> - Sample JSON workflow configurations  
+> - Complete Snowflake DDL  
+> - Java implementation snippets  
+> - Query performance test plans
